@@ -1,0 +1,111 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python training_pipeline/src/data_ingestion.py --config params.yaml
+    deps:
+    - path: params.yaml
+      hash: md5
+      md5: 0e42c61a579519dbc24fe83ec4810450
+      size: 556
+    - path: training_pipeline/src/data_ingestion.py
+      hash: md5
+      md5: 0bb716bdd7db2ebc43e97794a9c20d52
+      size: 1135
+    outs:
+    - path: data/raw/kepler_raw.csv
+      hash: md5
+      md5: 46512487524132f2136e1ae96901dc1a
+      size: 3093665
+  data_preprocessing:
+    cmd: python training_pipeline/src/data_preprocessing.py --config params.yaml
+    deps:
+    - path: data/raw/kepler_raw.csv
+      hash: md5
+      md5: 46512487524132f2136e1ae96901dc1a
+      size: 3093665
+    - path: params.yaml
+      hash: md5
+      md5: 0e42c61a579519dbc24fe83ec4810450
+      size: 556
+    - path: training_pipeline/src/data_preprocessing.py
+      hash: md5
+      md5: 1c0899cbff7f802f5693e10de2aec33a
+      size: 2030
+    outs:
+    - path: data/processed/clean_data.csv
+      hash: md5
+      md5: eafd009c4a12c12c26a09e47df8cc0bf
+      size: 1675365
+  feature_engineering:
+    cmd: python training_pipeline/src/feature_engineering.py --config 
+      params.yaml
+    deps:
+    - path: data/processed/clean_data.csv
+      hash: md5
+      md5: eafd009c4a12c12c26a09e47df8cc0bf
+      size: 1675365
+    - path: params.yaml
+      hash: md5
+      md5: 0e42c61a579519dbc24fe83ec4810450
+      size: 556
+    - path: training_pipeline/src/feature_engineering.py
+      hash: md5
+      md5: 868f7521b08f6b71c14527d2efe488ac
+      size: 2846
+    outs:
+    - path: backend/models/model_features.json
+      hash: md5
+      md5: eeccedbf7098e8098473919cbdf28f2c
+      size: 173
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 983a3c627d038990687c95518d7c582c
+      size: 90001
+    - path: data/processed/train.csv
+      hash: md5
+      md5: e281b445bfc29d8a2df53039214526d6
+      size: 360003
+  model_training:
+    cmd: python training_pipeline/src/model_training.py --config params.yaml
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: e281b445bfc29d8a2df53039214526d6
+      size: 360003
+    - path: params.yaml
+      hash: md5
+      md5: 0e42c61a579519dbc24fe83ec4810450
+      size: 556
+    - path: training_pipeline/src/model_training.py
+      hash: md5
+      md5: 7104992084cebdaced7b20661601b962
+      size: 1780
+    outs:
+    - path: backend/models/exoplanet_model.pkl
+      hash: md5
+      md5: 6f1ac581d20c02333b2dc76cb639cd14
+      size: 9951026
+  model_evaluation:
+    cmd: python training_pipeline/src/model_evaluation.py --config params.yaml
+    deps:
+    - path: backend/models/exoplanet_model.pkl
+      hash: md5
+      md5: 6f1ac581d20c02333b2dc76cb639cd14
+      size: 9951026
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 983a3c627d038990687c95518d7c582c
+      size: 90001
+    - path: params.yaml
+      hash: md5
+      md5: 0e42c61a579519dbc24fe83ec4810450
+      size: 556
+    - path: training_pipeline/src/model_evaluation.py
+      hash: md5
+      md5: 40ff056c761264cee1e977b38a545c51
+      size: 1727
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: ea5aba640116b189b9356b863f33e2a1
+      size: 144

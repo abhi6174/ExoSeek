@@ -1,0 +1,48 @@
+stages:
+  data_ingestion:
+    cmd: python training_pipeline/src/data_ingestion.py --config params.yaml
+    deps:
+      - training_pipeline/src/data_ingestion.py
+      - params.yaml
+    outs:
+      - data/raw/kepler_raw.csv
+
+  data_preprocessing:
+    cmd: python training_pipeline/src/data_preprocessing.py --config params.yaml
+    deps:
+      - training_pipeline/src/data_preprocessing.py
+      - data/raw/kepler_raw.csv
+      - params.yaml
+    outs:
+      - data/processed/clean_data.csv
+
+  feature_engineering:
+    cmd: python training_pipeline/src/feature_engineering.py --config params.yaml
+    deps:
+      - training_pipeline/src/feature_engineering.py
+      - data/processed/clean_data.csv
+      - params.yaml
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - backend/models/model_features.json
+
+  model_training:
+    cmd: python training_pipeline/src/model_training.py --config params.yaml
+    deps:
+      - training_pipeline/src/model_training.py
+      - data/processed/train.csv
+      - params.yaml
+    outs:
+      - backend/models/exoplanet_model.pkl
+
+  model_evaluation:
+    cmd: python training_pipeline/src/model_evaluation.py --config params.yaml
+    deps:
+      - training_pipeline/src/model_evaluation.py
+      - backend/models/exoplanet_model.pkl
+      - data/processed/test.csv
+      - params.yaml
+    metrics:
+      - metrics.json:
+          cache: false

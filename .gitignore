@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+.pytest_cache/
+
+# Node/React
+node_modules/
+dist/
+build/
+.DS_Store
+coverage/
+
+# Data (Don't commit large datasets)
+data/
+*.csv
+*.pkl
+!model_artifacts.pkl  # Keep the model if it's small (<100MB), otherwise ignore
+
+# Editor
+.vscode/
+.idea/
