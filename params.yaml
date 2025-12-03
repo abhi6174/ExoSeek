@@ -1,6 +1,5 @@
 external_data_config:
-  external_data_csv: "https://raw.githubusercontent.com/abhi6174/ExoSeek/3d2c305aa9b9ca3536a0d10ed5e373167ae99182/dataset/kepler_exoplanet_detection.csv"
-
+  external_data_csv: "https://raw.githubusercontent.com/abhi6174/datasets-sample/blob/main/dataset/kepler_exoplanet_detection.csv"
 raw_data_config: 
   dir: data/raw
   train_file: kepler_raw.csv
