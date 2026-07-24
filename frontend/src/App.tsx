@@ -7,7 +7,7 @@ import UploadPage from "./pages/UploadPage";
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+      <div className="min-h-screen bg-slate-950 font-sans text-slate-100">
         <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
