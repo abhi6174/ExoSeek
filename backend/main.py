@@ -5,6 +5,9 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from app.schemas import PredictionInput, PredictionOutput, BatchPredictionInput, BatchPredictionOutput
 
@@ -39,14 +42,17 @@ async def lifespan(app: FastAPI):
 
     model_artifacts.clear()
 
+frontend_url = os.getenv("FRONTEND_URL")
+origins = [origin.strip() for origin in frontend_url.split(",")] if frontend_url else []
+
 app = FastAPI(title="ExoSeek API", version="1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  
-    allow_headers=["*"],  
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/")
